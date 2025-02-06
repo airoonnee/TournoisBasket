@@ -22,6 +22,8 @@ security:
                 default_target_path: app_display # Redirection après connexion réussie
                 enable_csrf: true
                 username_parameter: email
+            access_denied_url: app_display
+
 
             logout:
                 path: app_logout
@@ -39,7 +41,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
     security:
