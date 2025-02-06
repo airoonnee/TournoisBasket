@@ -1,0 +1,38 @@
+<header class="navbar">
+    <nav>
+        <a href="{{ path('app_home') }}" class="btn">Home</a>
+
+        {% if app.user %}
+            <a href="{{ path('app_logout') }}" class="btn">Logout</a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="btn">Login</a>
+        {% endif %}
+    </nav>
+</header>
+
+<style>
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #333;
+    }
+
+    .navbar nav {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        text-decoration: none;
+        color: white;
+        background-color: #007bff;
+        border-radius: 5px;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+</style>

@@ -9,12 +9,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class DisplayController extends AbstractController
 {
-    #[Route('/display', name: 'app_display')]
+    #[Route('/tournaments', name: 'app_display')]
     public function index(TournamentsRepository $tournamentsRepository): Response
     {
         //recepère tous les tournois
         $tournaments = $tournamentsRepository->findAll();
-        return $this->render('display/index.html.twig', [
+        return $this->render('display/tournament.html.twig', [
             'controller_name' => 'DisplayController',
             'tournaments' => $tournaments,
         ]);
