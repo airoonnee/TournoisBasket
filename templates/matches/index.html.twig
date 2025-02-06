@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-{% include 'header/header.html.twig' %}
 
 {% block title %}Hello MatchesController!{% endblock %}
 
@@ -10,12 +9,18 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Matchs du Tournoi: {{ tournament.name }}</h1>
 
-    This friendly message is coming from:
     <ul>
-        <li>Your controller at <code>C:/Users/asus/OneDrive/Documents/YNOV/B2/YmmertionPHP/ProjetBasket/ProjetBasket/src/Controller/MatchesController.php</code></li>
-        <li>Your template at <code>C:/Users/asus/OneDrive/Documents/YNOV/B2/YmmertionPHP/ProjetBasket/ProjetBasket/templates/matches/index.html.twig</code></li>
+        {% for match in matches %}
+            <li>
+                Match entre {{ match.getTeam1Id().getName() }} et {{ match.getTeam2Id().getName() }} le {{ match.getMatchDate|date('Y-m-d') }}
+            </li>
+        {% else %}
+            <li>Aucun match trouvé pour ce tournoi.</li>
+        {% endfor %}
     </ul>
+
+    <a href="{{ path('app_display') }}" class="btn btn-secondary">Retour aux tournois</a>
 </div>
 {% endblock %}

@@ -9,15 +9,16 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Liste des Tournois</h1>
 
-    <h2>List of Tournaments:</h2>
     <ul>
         {% for tournament in tournaments %}
-            <li>
-                <strong>le tournoi {{ tournament.name }}</strong>  
-                <a>commence le {{ tournament.start_date|date('Y-m-d') }}</a>
-            </li>
+        <li>
+            <strong>Tournoi: {{ tournament.name }}</strong>  
+            <a>commence le {{ tournament.start_date|date('Y-m-d') }}</a>
+            <br>
+            <a href="{{ path('app_matches', {id: tournament.id}) }}" class="btn btn-primary">Voir les matchs</a>
+        </li>
         {% else %}
             <li>No tournaments found!</li>
         {% endfor %}

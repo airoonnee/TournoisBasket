@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TournamentsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,15 @@ class Tournaments
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updated = null;
+
+
+    #[ORM\OneToMany(mappedBy: 'tournament', targetEntity: Matches::class, cascade: ['persist', 'remove'])]
+    private Collection $matches;
+
+    public function __construct()
+    {
+        $this->matches = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +116,32 @@ class Tournaments
     public function setUpdated(?\DateTimeInterface $updated): static
     {
         $this->updated = $updated;
+
+        return $this;
+    }
+    
+    public function getMatches(): Collection
+    {
+        return $this->matches;
+    }
+
+    public function addMatch(Matches $match): static
+    {
+        if (!$this->matches->contains($match)) {
+            $this->matches->add($match);
+            $match->setTournamentId($this); // Associe le match au tournoi
+        }
+
+        return $this;
+    }
+
+    public function removeMatch(Matches $match): static
+    {
+        if ($this->matches->removeElement($match)) {
+            if ($match->getTournamentId() === $this) {
+                $match->setTournamentId(null); // Supprime l'association
+            }
+        }
 
         return $this;
     }

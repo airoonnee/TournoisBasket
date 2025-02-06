@@ -16,26 +16,22 @@ class Matches
     #[ORM\Column]
     private ?int $id = null;
 
-    /**
-     * @var Collection<int, Tournaments>
-     */
-    #[ORM\ManyToMany(targetEntity: Tournaments::class)]
-    private Collection $tournament_id;
+
+    #[ORM\ManyToOne(targetEntity: Tournaments::class, inversedBy: "matches")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Tournaments $tournament_id = null;
+
 
     #[ORM\Column]
     private ?int $round = null;
 
-    /**
-     * @var Collection<int, Teams>
-     */
     #[ORM\ManyToOne(targetEntity: Teams::class)]
-    private Collection $team1_id;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Teams $team1_id = null; 
 
-    /**
-     * @var Collection<int, Teams>
-     */
     #[ORM\ManyToOne(targetEntity: Teams::class)]
-    private Collection $team2_id;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Teams $team2_id = null; 
 
     #[ORM\Column]
     private ?int $team1_score = null;
@@ -46,41 +42,24 @@ class Matches
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $match_date = null;
 
-    public function __construct()
-    {
-        $this->tournament_id = new ArrayCollection();
-        $this->team1_id = new ArrayCollection();
-        $this->team2_id = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Collection<int, Tournaments>
-     */
-    public function getTournamentId(): Collection
+
+    public function getTournamentId(): ?Tournaments
     {
         return $this->tournament_id;
     }
-
-    public function addTournamentId(Tournaments $tournamentId): static
+    
+    public function setTournamentId(?Tournaments $tournament_id): static
     {
-        if (!$this->tournament_id->contains($tournamentId)) {
-            $this->tournament_id->add($tournamentId);
-        }
-
+        $this->tournament_id = $tournament_id;
         return $this;
     }
-
-    public function removeTournamentId(Tournaments $tournamentId): static
-    {
-        $this->tournament_id->removeElement($tournamentId);
-
-        return $this;
-    }
+    
 
     public function getRound(): ?int
     {
@@ -94,51 +73,26 @@ class Matches
         return $this;
     }
 
-    /**
-     * @return Collection<int, Teams>
-     */
-    public function getTeam1Id(): Collection
+
+    public function getTeam1Id(): ?Teams
     {
         return $this->team1_id;
     }
 
-    public function addTeam1Id(Teams $team1Id): static
+    public function setTeam1Id(?Teams $team1_id): static
     {
-        if (!$this->team1_id->contains($team1Id)) {
-            $this->team1_id->add($team1Id);
-        }
-
+        $this->team1_id = $team1_id;
         return $this;
     }
 
-    public function removeTeam1Id(Teams $team1Id): static
-    {
-        $this->team1_id->removeElement($team1Id);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Teams>
-     */
-    public function getTeam2Id(): Collection
+    public function getTeam2Id(): ?Teams
     {
         return $this->team2_id;
     }
 
-    public function addTeam2Id(Teams $team2Id): static
+    public function setTeam2Id(?Teams $team2_id): static
     {
-        if (!$this->team2_id->contains($team2Id)) {
-            $this->team2_id->add($team2Id);
-        }
-
-        return $this;
-    }
-
-    public function removeTeam2Id(Teams $team2Id): static
-    {
-        $this->team2_id->removeElement($team2Id);
-
+        $this->team2_id = $team2_id;
         return $this;
     }
 
