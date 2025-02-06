@@ -49,4 +49,12 @@ class Players
 
         return $this;
     }
+    public function __toString(): string
+    {
+        return $this->user_id 
+            ? $this->user_id->getFirstName() . ' ' . $this->user_id->getLastName() 
+            : 'Joueur inconnu';
+    }
+    
+    
 }

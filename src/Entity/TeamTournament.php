@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\TeamTournamentRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TeamTournamentRepository::class)]
@@ -16,72 +13,44 @@ class TeamTournament
     private ?int $id = null;
 
     /**
-     * @var Collection<int, Tournaments>
+     * @var Tournaments
      */
-    #[ORM\ManyToMany(targetEntity: Tournaments::class)]
-    private Collection $tournament_id;
+    #[ORM\OneToOne(targetEntity: Tournaments::class)]
+    #[ORM\JoinColumn(nullable: false)] // Assurez-vous que la relation est obligatoire
+    private ?Tournaments $tournament_id = null;
 
     /**
-     * @var Collection<int, Teams>
+     * @var Teams
      */
-    #[ORM\ManyToMany(targetEntity: Teams::class)]
-    private Collection $team_id;
-
-    public function __construct()
-    {
-        $this->tournament_id = new ArrayCollection();
-        $this->team_id = new ArrayCollection();
-    }
+    #[ORM\OneToOne(targetEntity: Teams::class)]
+    #[ORM\JoinColumn(nullable: false)] // Assurez-vous que la relation est obligatoire
+    private ?Teams $team_id = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Collection<int, Tournaments>
-     */
-    public function getTournamentId(): Collection
+    public function getTournamentId(): ?Tournaments
     {
         return $this->tournament_id;
     }
 
-    public function addTournamentId(Tournaments $tournamentId): static
+    public function setTournamentId(Tournaments $tournamentId): static
     {
-        if (!$this->tournament_id->contains($tournamentId)) {
-            $this->tournament_id->add($tournamentId);
-        }
+        $this->tournament_id = $tournamentId;
 
         return $this;
     }
 
-    public function removeTournamentId(Tournaments $tournamentId): static
-    {
-        $this->tournament_id->removeElement($tournamentId);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Teams>
-     */
-    public function getTeamId(): Collection
+    public function getTeamId(): ?Teams
     {
         return $this->team_id;
     }
 
-    public function addTeamId(Teams $teamId): static
+    public function setTeamId(Teams $teamId): static
     {
-        if (!$this->team_id->contains($teamId)) {
-            $this->team_id->add($teamId);
-        }
-
-        return $this;
-    }
-
-    public function removeTeamId(Teams $teamId): static
-    {
-        $this->team_id->removeElement($teamId);
+        $this->team_id = $teamId;
 
         return $this;
     }

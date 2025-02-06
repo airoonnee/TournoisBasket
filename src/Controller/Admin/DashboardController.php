@@ -1,19 +1,31 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
+
+use App\Entity\User;
+
+use App\Entity\Matches;
+use App\Entity\Players;
+use App\Entity\Position;
+use App\Entity\Results;
+use App\Entity\Teams;
+use App\Entity\TeamTournament;
+use App\Entity\Tournaments;
 
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
-#[AdminDashboard(routePath: '/admin', routeName: 'admin')]
-class AdminController extends AbstractDashboardController
+class DashboardController extends AbstractDashboardController
 {
+    #[Route(path:"/admin", name:"admin")]
     public function index(): Response
     {
-        return parent::index();
+        // return parent::index();
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
         //
@@ -21,8 +33,8 @@ class AdminController extends AbstractDashboardController
         // return $this->redirectToRoute('admin_user_index');
         //
         // 1.2) Same example but using the "ugly URLs" that were used in previous EasyAdmin versions:
-        // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        // return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
+        $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
+        return $this->redirect($adminUrlGenerator->setController(UserCrudController::class)->generateUrl());
 
         // Option 2. You can make your dashboard redirect to different pages depending on the user
         //
@@ -45,6 +57,14 @@ class AdminController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
+        yield MenuItem::linkToCrud('Matches', 'fas fa-list', Matches::class);
+        yield MenuItem::linkToCrud('Joueur', 'fas fa-list', Players::class);
+        yield MenuItem::linkToCrud('Post', 'fas fa-list', Position::class);
+        yield MenuItem::linkToCrud('Resultat Tournois', 'fas fa-list', Results::class);
+        yield MenuItem::linkToCrud('Équipes', 'fas fa-list', Teams::class);
+        yield MenuItem::linkToCrud('Inscription Tournois', 'fas fa-list', TeamTournament::class);
+        yield MenuItem::linkToCrud('Tournois', 'fas fa-list', Tournaments::class);
+        yield MenuItem::linkToCrud('Utilisateur', 'fas fa-list', User::class);
+
     }
 }
