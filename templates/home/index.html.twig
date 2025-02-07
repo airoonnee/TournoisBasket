@@ -1,20 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .button-container { text-align: center; margin-top: 20px; }
+    .btn { padding: 10px 20px; font-size: 16px; border: none; cursor: pointer; border-radius: 5px; }
+    .btn-primary { background-color: #007bff; color: white; }
+    .btn-primary:hover { background-color: #0056b3; }
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
+    <h1>Plateforme de tournois de basket en équipe</h1>
+    <p>Notre projet est une plateforme en ligne dédiée à l'organisation et à la gestion de tournois de basketball en équipe. L'objectif est d'offrir un espace centralisé où les joueurs, les équipes et les organisateurs peuvent créer, gérer et participer à des compétitions facilement.</p>
+    
+    <h2>Fonctionnalités principales</h2>
     <ul>
-        <li>Your controller at <code>C:/Users/asus/OneDrive/Documents/YNOV/B2/YmmertionPHP/ProjetBasket/ProjetBasket/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>C:/Users/asus/OneDrive/Documents/YNOV/B2/YmmertionPHP/ProjetBasket/ProjetBasket/templates/home/index.html.twig</code></li>
+        <li>🏀 <strong>Inscription et gestion des équipes</strong> : Chaque joueur peut s'inscrire, rejoindre une équipe ou en créer une. Les capitaines ont la possibilité de gérer la composition de leur effectif.</li>
+        <li>📅 <strong>Organisation des tournois</strong> : Les organisateurs peuvent créer des tournois, définir les règles, fixer les dates et gérer les inscriptions en toute simplicité.</li>
+        <li>📊 <strong>Classements et statistiques</strong> : À chaque match, les résultats sont mis à jour en temps réel, permettant aux équipes de suivre leur progression et aux spectateurs de rester informés.</li>
+        <li>🔎 <strong>Filtres et catégories</strong> : Les tournois peuvent être triés selon leur statut : en cours, à venir ou terminés, afin d'offrir une meilleure visibilité aux participants.</li>
+        <li>🔐 <strong>Accès sécurisé</strong> : L'accès aux tournois est restreint aux utilisateurs connectés, garantissant une expérience personnalisée et sécurisée.</li>
     </ul>
+    
+    <h2>Pourquoi cette plateforme ?</h2>
+    <p>L'idée est née d'un constat simple : il n'existe pas assez d'outils numériques dédiés à la gestion de tournois de basketball en équipe. Notre site vise à combler ce besoin en simplifiant chaque étape, de l’inscription à la gestion des matchs, tout en offrant une interface intuitive et moderne.</p>
+    
+    <p><strong>Que tu sois joueur, organisateur ou simple passionné de basket, notre plateforme est faite pour toi ! 🚀</strong></p>
+    
+    <div class="button-container">
+        <a href="{{ app.user ? path('app_display') : path('app_login') }}" class="btn btn-primary">
+            Voir les Tournois
+        </a>
+    </div>
 </div>
 {% endblock %}

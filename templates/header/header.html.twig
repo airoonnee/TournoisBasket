@@ -1,9 +1,11 @@
 <header class="navbar">
     <nav>
-        <a href="{{ path('app_home') }}" class="btn">Home</a>
+        <a href="{{ path('app_home') }}" class="btn">Accueil</a>
 
         {% if app.user %}
             <a href="{{ path('app_logout') }}" class="btn">Logout</a>
+            <a href="{{ path('app_profile') }}" class="btn">Profil</a>
+
         {% else %}
             <a href="{{ path('app_login') }}" class="btn">Login</a>
         {% endif %}

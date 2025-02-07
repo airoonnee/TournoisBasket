@@ -1,19 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DisplayController!{% endblock %}
+{% block title %}Tournois{% endblock %}
 
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .filter-container { margin-bottom: 20px; }
 </style>
 
 <div class="example-wrapper">
     <h1>Liste des Tournois</h1>
+    
+    <div class="filter-container">
+        <label for="filter">Filtrer par statut :</label>
+        <select id="filter" onchange="filterTournaments()">
+            <option value="all">Tous</option>
+            <option value="ongoing">En cours</option>
+            <option value="upcoming">À venir</option>
+            <option value="finished">Terminé</option>
+        </select>
+    </div>
 
-    <ul>
+    <ul id="tournament-list">
         {% for tournament in tournaments %}
-        <li>
+        {% set status = 'upcoming' %}
+        {% if tournament.start_date <= 'now'|date('Y-m-d') and tournament.end_date >= 'now'|date('Y-m-d') %}
+            {% set status = 'ongoing' %}
+        {% elseif tournament.end_date < 'now'|date('Y-m-d') %}
+            {% set status = 'finished' %}
+        {% endif %}
+        <li class="tournament-item" data-status="{{ status }}">
             <strong>Tournoi: {{ tournament.name }}</strong>  
             <a>commence le {{ tournament.start_date|date('Y-m-d') }}</a>
             <br>
@@ -23,6 +40,20 @@
             <li>No tournaments found!</li>
         {% endfor %}
     </ul>
-
 </div>
+
+<script>
+    function filterTournaments() {
+        let filterValue = document.getElementById("filter").value;
+        let tournaments = document.querySelectorAll(".tournament-item");
+        
+        tournaments.forEach(tournament => {
+            if (filterValue === "all" || tournament.getAttribute("data-status") === filterValue) {
+                tournament.style.display = "block";
+            } else {
+                tournament.style.display = "none";
+            }
+        });
+    }
+</script>
 {% endblock %}
