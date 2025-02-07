@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Toutes les équipes{% endblock %}
+
+{% block body %}
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+
+{% for message in app.flashes('error') %}
+    <div class="alert alert-danger">{{ message }}</div>
+{% endfor %}
+
+    <div class="example-wrapper">
+        <h1>Toutes les équipes</h1>
+
+        {% if teams is not empty %}
+            <ul>
+                {% for team in teams %}
+                    <li>
+                        <strong>{{ team.name }}</strong>
+                        {% if team.logoUrl %}
+                            <img src="{{ team.logoUrl }}" alt="Logo de {{ team.name }}" width="50">
+                        {% else %}
+                            <p>No logo available</p>
+                        {% endif %}
+                        <form action="{{ path('app_join_team', {'teamId': team.id}) }}" method="POST">
+                            <button type="submit" class="btn btn-primary">Rejoindre l'équipe</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucune équipe n'a été trouvée.</p>
+        {% endif %}
+    </div>
+{% endblock %}
