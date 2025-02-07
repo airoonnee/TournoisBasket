@@ -12,6 +12,9 @@
             <a href="{{ path('app_all_team') }}" class="btn">Toute les Equipes</a>
             <a href="{{ path('app_display') }}" class="btn">Tournois</a>
 
+            {% if 'ROLE_ADMIN' in app.user.roles %}
+                <a href="{{ path('admin') }}" class="btn">Admin</a> <!-- Bouton Admin -->
+            {% endif %}
 
         {% else %}
             <a href="{{ path('app_login') }}" class="btn">Login</a>

@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 
 class MatchesCrudController extends AbstractCrudController
 {
@@ -31,6 +32,11 @@ class MatchesCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            ImageField::new('logo')
+                ->setBasePath('uploads') // Chemin URL pour accéder aux fichiers téléchargés
+                ->setUploadDir('public/uploads') // Chemin réel où les fichiers sont sauvegardés
+                ->setRequired(true),
+
             IdField::new('id'),
             DateTimeField::new('match_date', 'Date du match'),
             AssociationField::new('team1_id', 'Équipe 1'),

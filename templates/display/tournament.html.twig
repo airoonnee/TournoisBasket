@@ -4,17 +4,27 @@
 
 {% block body %}
 <style>
-    html, head, body{
-        background-color : white;
+    html, head, body {
+        background-color: white;
     }
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    .filter-container { margin-bottom: 20px; }
+    .example-wrapper {
+        margin: 1em auto;
+        max-width: 800px;
+        width: 95%;
+        font: 18px/1.5 sans-serif;
+    }
+    .example-wrapper code {
+        background: #F5F5F5;
+        padding: 2px 6px;
+    }
+    .filter-container {
+        margin-bottom: 20px;
+    }
 </style>
 
 <div class="example-wrapper">
     <h1>Liste des Tournois</h1>
-    
+
     <div class="filter-container">
         <label for="filter">Filtrer par statut :</label>
         <select id="filter" onchange="filterTournaments()">
@@ -34,19 +44,30 @@
 
                 <br>
                 <a href="{{ path('app_matches', {id: tournament.id}) }}" class="btn btn-primary">Voir les matchs</a>
+
+                {# Débogage : vérifier les valeurs de isRegistered #}
+                {{ dump(isRegistered) }}
+                
+                {% if team is not null and tournament.status == 'upcoming' %}
+                    {% if isRegistered[tournament.id] %}
+                        <button class="btn btn-secondary" disabled>Équipe déjà inscrite</button>
+                    {% else %}
+                        <a href="{{ path('app_register_team', {tournament_id: tournament.id}) }}" class="btn btn-success">Inscrire mon équipe</a>
+                    {% endif %}
+                {% endif %}
             </li>
         {% else %}
-            <li>No tournaments found!</li>
+            <li>Aucun tournoi trouvé.</li>
         {% endfor %}
+
     </ul>
-    
 </div>
 
 <script>
     function filterTournaments() {
         let filterValue = document.getElementById("filter").value;
         let tournaments = document.querySelectorAll(".tournament-item");
-        
+
         tournaments.forEach(tournament => {
             if (filterValue === "all" || tournament.getAttribute("data-status") === filterValue) {
                 tournament.style.display = "block";
