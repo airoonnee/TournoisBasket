@@ -27,19 +27,11 @@
 
     <ul id="tournament-list">
         {% for tournament in tournaments %}
-            {% set status = 'upcoming' %}
-            {% set now = "now"|date('Y-m-d') %}
-    
-            {# Vérifie si la date de début et la date de fin sont correctement définies #}
-            {% if tournament.getStartDate() <= now and tournament.getEndDate() >= now %}
-                {% set status = 'ongoing' %}
-            {% elseif tournament.getEndDate() < now %}
-                {% set status = 'finished' %}
-            {% endif %}
-            
-            <li class="tournament-item" data-status="{{ status }}">
+            <li class="tournament-item" data-status="{{ tournament.status }}">
                 <strong>Tournoi: {{ tournament.name }}</strong>  
                 <a>commence le {{ tournament.getStartDate()|date('Y-m-d') }}</a>
+                <a>finit le {{ tournament.getEndDate()|date('Y-m-d') }}</a>
+
                 <br>
                 <a href="{{ path('app_matches', {id: tournament.id}) }}" class="btn btn-primary">Voir les matchs</a>
             </li>

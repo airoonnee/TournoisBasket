@@ -1,4 +1,4 @@
-<?php
+<?php  
 namespace App\Controller;
 
 use App\Entity\Players;
@@ -42,21 +42,23 @@ class AllTeamController extends AbstractController
         $existingPlayer = $playersRepository->findOneBy(['user_id' => $user]);
 
         if ($existingPlayer) {
-            $this->addFlash('error', 'Vous êtes déjà dans une équipe.');
-            return $this->redirectToRoute('app_all_team');
+            // Si le joueur est déjà dans une équipe, l'enlever de cette équipe
+            $existingPlayer->setTeamId($team); // Assigner le joueur à la nouvelle équipe
+            $entityManager->flush(); // Sauvegarder les modifications dans la base de données
+
+            $this->addFlash('success', 'Vous avez changé d\'équipe pour ' . $team->getName() . ' avec succès !');
+        } else {
+            // Créer un nouveau joueur et l'ajouter à l'équipe
+            $player = new Players();
+            $player->setUserId($user);
+            $player->setTeamId($team);
+
+            $entityManager->persist($player);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Vous avez rejoint l\'équipe ' . $team->getName() . ' avec succès !');
         }
 
-        // Créer un nouveau joueur et l'ajouter à l'équipe
-        $player = new Players();
-        $player->setUserId($user);
-        $player->setTeamId($team);
-
-        $entityManager->persist($player);
-        $entityManager->flush();
-
-        $this->addFlash('error', 'Vous êtes déjà dans une équipe.');
-
-        $this->addFlash('success', 'Vous avez rejoint l\'équipe ' . $team->getName() . ' avec succès !');
         return $this->redirectToRoute('app_all_team');
     }
 }
