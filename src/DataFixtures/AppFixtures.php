@@ -11,6 +11,7 @@ use App\Entity\Teams;
 use App\Entity\Players;
 use App\Entity\Position;
 use App\Entity\Results;
+use App\Entity\TeamTournament;
 use Faker\Factory;
 
 class AppFixtures extends Fixture
@@ -44,6 +45,17 @@ class AppFixtures extends Fixture
             $manager->persist($user);
             $users[] = $user;
         }
+        // Créer un utilisateur ADMIN supplémentaire
+        $adminUser = new User();
+        $adminUser->setEmail('admin@gmail.com');
+        $adminUser->setPassword(password_hash('admin1234', PASSWORD_BCRYPT)); // Utilisez un mot de passe sécurisé
+        $adminUser->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+        $adminUser->setFirstName('Admin');
+        $adminUser->setLastName('Admin');
+        $adminUser->setBirthDate($faker->dateTimeThisCentury);
+        $adminUser->setPosition($faker->randomElement($positions)); // Associer une position (si nécessaire)
+        $manager->persist($adminUser);
+
 
         // Créer 5 équipes
         $teams = [];
@@ -67,33 +79,25 @@ class AppFixtures extends Fixture
             $tournament->setUpdated($faker->optional()->dateTimeThisDecade);
             $manager->persist($tournament);
             $tournaments[] = $tournament;
+
+            // Associer les équipes aux tournois
+            $teamCount = rand(2, 4); // On associe entre 2 et 4 équipes par tournoi
+            for ($j = 0; $j < $teamCount; $j++) {
+                $teamTournament = new TeamTournament();
+                $teamTournament->setTournament($tournament);
+                $teamTournament->setTeam($faker->randomElement($teams)); // Sélectionner une équipe aléatoire
+                $manager->persist($teamTournament);
+            }
         }
 
         // Créer des matchs
-        // $matches = [];
-        // for ($i = 0; $i < 10; $i++) {
-        //     $match = new Matches();
-        //     $match->setTournamentId($faker->randomElement($tournaments));
-        //     $match->setRound($faker->numberBetween(1, 5));
-        //     $match->setTeam1Id($faker->randomElement($teams));
-        //     $match->setTeam2Id($faker->randomElement($teams));
-        //     $match->setTeam1Score($faker->numberBetween(0, 5));
-        //     $match->setTeam2Score($faker->numberBetween(0, 5));
-        //     $match->setMatchDate($faker->dateTimeThisYear);
-        //     $manager->persist($match);
-        //     $matches[] = $match;
-        // }
-        
-        // Créer des matchs en assurant la liaison avec un tournoi
         $matches = [];
         foreach ($tournaments as $tournament) {
-            // Chaque tournoi reçoit entre 2 et 5 matchs
             $matchCount = rand(2, 5);
             for ($i = 0; $i < $matchCount; $i++) {
                 $match = new Matches();
                 $match->setTournamentId($tournament); // Associer au tournoi
 
-                // Éviter que Team1 soit la même que Team2
                 do {
                     $team1 = $faker->randomElement($teams);
                     $team2 = $faker->randomElement($teams);
@@ -111,26 +115,17 @@ class AppFixtures extends Fixture
         }
 
         // Créer des joueurs
-        // for ($i = 0; $i < 10; $i++) {
-        //     $player = new Players();
-        //     $player->setUserId($faker->randomElement($users));
-        //     $player->setTeamId($faker->randomElement($teams));
-        //     $manager->persist($player);
-        // }
-        // Créer des joueurs
-        // $usedUsers = []; // Stocker les utilisateurs déjà utilisés
         for ($i = 0; $i < 10; $i++) {
-            $user = $users[$i] ?? null; // Assigner un utilisateur unique par joueur
+            $user = $users[$i] ?? null;
             if (!$user) {
-                break; // Si plus d'utilisateurs disponibles, arrêter
+                break;
             }
             
             $player = new Players();
-            $player->setUserId($user); // Chaque user est utilisé une seule fois
+            $player->setUserId($user);
             $player->setTeamId($faker->randomElement($teams));
             $manager->persist($player);
         }
-
 
         // Créer des résultats
         for ($i = 0; $i < 5; $i++) {

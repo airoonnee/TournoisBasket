@@ -12,46 +12,38 @@ class TeamTournament
     #[ORM\Column]
     private ?int $id = null;
 
-    /**
-     * @var Tournaments
-     */
-    #[ORM\OneToOne(targetEntity: Tournaments::class)]
-    #[ORM\JoinColumn(nullable: false)] // Assurez-vous que la relation est obligatoire
-    private ?Tournaments $tournament_id = null;
+    #[ORM\ManyToOne(targetEntity: Tournaments::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Tournaments $tournament = null;
 
-    /**
-     * @var Teams
-     */
-    #[ORM\OneToOne(targetEntity: Teams::class)]
-    #[ORM\JoinColumn(nullable: false)] // Assurez-vous que la relation est obligatoire
-    private ?Teams $team_id = null;
+    #[ORM\ManyToOne(targetEntity: Teams::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Teams $team = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTournamentId(): ?Tournaments
+    public function getTournament(): ?Tournaments
     {
-        return $this->tournament_id;
+        return $this->tournament;
     }
 
-    public function setTournamentId(Tournaments $tournamentId): static
+    public function setTournament(Tournaments $tournament): static
     {
-        $this->tournament_id = $tournamentId;
-
+        $this->tournament = $tournament;
         return $this;
     }
 
-    public function getTeamId(): ?Teams
+    public function getTeam(): ?Teams
     {
-        return $this->team_id;
+        return $this->team;
     }
 
-    public function setTeamId(Teams $teamId): static
+    public function setTeam(Teams $team): static
     {
-        $this->team_id = $teamId;
-
+        $this->team = $team;
         return $this;
     }
 }
