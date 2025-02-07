@@ -85,12 +85,26 @@ class AppFixtures extends Fixture
         }
 
         // Créer des joueurs
+        // for ($i = 0; $i < 10; $i++) {
+        //     $player = new Players();
+        //     $player->setUserId($faker->randomElement($users));
+        //     $player->setTeamId($faker->randomElement($teams));
+        //     $manager->persist($player);
+        // }
+        // Créer des joueurs
+        // $usedUsers = []; // Stocker les utilisateurs déjà utilisés
         for ($i = 0; $i < 10; $i++) {
+            $user = $users[$i] ?? null; // Assigner un utilisateur unique par joueur
+            if (!$user) {
+                break; // Si plus d'utilisateurs disponibles, arrêter
+            }
+            
             $player = new Players();
-            $player->setUserId($faker->randomElement($users));
+            $player->setUserId($user); // Chaque user est utilisé une seule fois
             $player->setTeamId($faker->randomElement($teams));
             $manager->persist($player);
         }
+
 
         // Créer des résultats
         for ($i = 0; $i < 5; $i++) {
