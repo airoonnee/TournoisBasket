@@ -12,7 +12,7 @@ Vous devez utiliser :
 
 ### Cloner le dépôt
 ```bash
-git clone https://github.com/votre-repo/tournoi-symfony.git
+https://github.com/airoonnee/TournoisBasket.git
 cd tournoi-symfony
 ```
 
