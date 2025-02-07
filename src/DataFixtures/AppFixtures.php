@@ -70,18 +70,44 @@ class AppFixtures extends Fixture
         }
 
         // Créer des matchs
+        // $matches = [];
+        // for ($i = 0; $i < 10; $i++) {
+        //     $match = new Matches();
+        //     $match->setTournamentId($faker->randomElement($tournaments));
+        //     $match->setRound($faker->numberBetween(1, 5));
+        //     $match->setTeam1Id($faker->randomElement($teams));
+        //     $match->setTeam2Id($faker->randomElement($teams));
+        //     $match->setTeam1Score($faker->numberBetween(0, 5));
+        //     $match->setTeam2Score($faker->numberBetween(0, 5));
+        //     $match->setMatchDate($faker->dateTimeThisYear);
+        //     $manager->persist($match);
+        //     $matches[] = $match;
+        // }
+        
+        // Créer des matchs en assurant la liaison avec un tournoi
         $matches = [];
-        for ($i = 0; $i < 10; $i++) {
-            $match = new Matches();
-            $match->setTournamentId($faker->randomElement($tournaments));
-            $match->setRound($faker->numberBetween(1, 5));
-            $match->setTeam1Id($faker->randomElement($teams));
-            $match->setTeam2Id($faker->randomElement($teams));
-            $match->setTeam1Score($faker->numberBetween(0, 5));
-            $match->setTeam2Score($faker->numberBetween(0, 5));
-            $match->setMatchDate($faker->dateTimeThisYear);
-            $manager->persist($match);
-            $matches[] = $match;
+        foreach ($tournaments as $tournament) {
+            // Chaque tournoi reçoit entre 2 et 5 matchs
+            $matchCount = rand(2, 5);
+            for ($i = 0; $i < $matchCount; $i++) {
+                $match = new Matches();
+                $match->setTournamentId($tournament); // Associer au tournoi
+
+                // Éviter que Team1 soit la même que Team2
+                do {
+                    $team1 = $faker->randomElement($teams);
+                    $team2 = $faker->randomElement($teams);
+                } while ($team1 === $team2);
+
+                $match->setTeam1Id($team1);
+                $match->setTeam2Id($team2);
+                $match->setRound($faker->numberBetween(1, 5));
+                $match->setTeam1Score($faker->numberBetween(0, 5));
+                $match->setTeam2Score($faker->numberBetween(0, 5));
+                $match->setMatchDate($faker->dateTimeThisYear);
+                $manager->persist($match);
+                $matches[] = $match;
+            }
         }
 
         // Créer des joueurs

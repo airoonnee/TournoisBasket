@@ -38,6 +38,7 @@ class Tournaments
     #[ORM\OneToMany(mappedBy: 'tournament', targetEntity: Matches::class, cascade: ['persist', 'remove'])]
     private Collection $matches;
 
+
     public function __construct()
     {
         $this->matches = new ArrayCollection();
@@ -148,6 +149,6 @@ class Tournaments
     public function __toString(): string
     {
         return $this->name ?? 'Tournoi inconnu';
-    }
+    }  
 
 }
